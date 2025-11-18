@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres-migrations:
+    image: postgres:16
+    container_name: postgres-migrations
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_DB=migrations_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - migrations-data:/var/lib/postgresql/data
+    networks:
+      - education-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql-migrations:
+    image: mysql:8.0
+    container_name: mysql-migrations
+    environment:
+      - MYSQL_ROOT_PASSWORD=password123
+      - MYSQL_DATABASE=migrations_db
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=password123
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-migrations-data:/var/lib/mysql
+    networks:
+      - education-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  migrations-data:
+  mysql-migrations-data:
+
+networks:
+  education-network:
+    driver: bridge

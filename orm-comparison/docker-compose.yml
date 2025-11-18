@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres-orm:
+    image: postgres:16
+    container_name: postgres-orm
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_DB=orm_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - orm-data:/var/lib/postgresql/data
+    networks:
+      - education-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app-server:
+    image: node:20
+    container_name: orm-app
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres-orm
+    networks:
+      - education-network
+    command: npm run dev
+
+volumes:
+  orm-data:
+
+networks:
+  education-network:
+    driver: bridge

@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres-test:
+    image: postgres:16
+    container_name: postgres-test
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_DB=test_db
+    ports:
+      - "5436:5432"
+    volumes:
+      - testing-data:/var/lib/postgresql/data
+    networks:
+      - education-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  test-runner:
+    image: node:20
+    container_name: test-runner
+    working_dir: /tests
+    volumes:
+      - ./:/tests
+    depends_on:
+      - postgres-test
+    networks:
+      - education-network
+    environment:
+      - DATABASE_URL=postgresql://admin:password123@postgres-test:5432/test_db
+
+volumes:
+  testing-data:
+
+networks:
+  education-network:
+    driver: bridge

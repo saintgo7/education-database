@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  neo4j:
+    image: neo4j:5.13
+    container_name: neo4j-graph
+    environment:
+      - NEO4J_AUTH=neo4j/password123
+      - NEO4J_PLUGINS=["graph-algorithms"]
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+      - "7473:7473"
+    volumes:
+      - neo4j-data:/var/lib/neo4j/data
+      - neo4j-logs:/var/lib/neo4j/logs
+    networks:
+      - education-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7474"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  neo4j-data:
+  neo4j-logs:
+
+networks:
+  education-network:
+    driver: bridge
