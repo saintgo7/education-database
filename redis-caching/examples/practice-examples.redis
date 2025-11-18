@@ -1,0 +1,245 @@
+-- Redis 50 Practice Examples
+-- Comprehensive examples covering various Redis operations
+
+-- ============================================
+-- 1-10: String Operations
+-- ============================================
+
+-- 1. SET key-value
+SET user:1 "John Doe"
+
+-- 2. GET value
+GET user:1
+
+-- 3. APPEND to string
+APPEND user:1 " (Premium)"
+
+-- 4. STRLEN
+STRLEN user:1
+
+-- 5. INCR increment
+INCR page:views
+
+-- 6. INCRBY increment by value
+INCRBY counter:sales 100
+
+-- 7. DECR decrement
+DECR attempts:left
+
+-- 8. DECRBY decrement by value
+DECRBY stock:item1 5
+
+-- 9. MSET multiple keys
+MSET key1 "value1" key2 "value2" key3 "value3"
+
+-- 10. MGET multiple keys
+MGET key1 key2 key3
+
+-- ============================================
+-- 11-20: Key Expiration and TTL
+-- ============================================
+
+-- 11. SETEX set with expiration
+SETEX session:abc123 3600 "session_data"
+
+-- 12. PSETEX set with millisecond expiration
+PSETEX temp:data 5000 "temporary"
+
+-- 13. EXPIRE set expiration
+SET key "value"
+EXPIRE key 60
+
+-- 14. PEXPIRE millisecond expiration
+PEXPIRE key 5000
+
+-- 15. TTL get time to live
+TTL key
+
+-- 16. PTTL get millisecond TTL
+PTTL key
+
+-- 17. PERSIST remove expiration
+PERSIST key
+
+-- 18. EXPIREAT expire at timestamp
+EXPIREAT key 1703020800
+
+-- 19. PEXPIREAT millisecond timestamp
+PEXPIREAT key 1703020800000
+
+-- 20. Delete expired keys behavior
+KEYS * -- Lists all keys
+FLUSHDB -- Clear all keys in current DB
+
+-- ============================================
+-- 21-30: List Operations
+-- ============================================
+
+-- 21. LPUSH push to left
+LPUSH queue:tasks "Task 1"
+
+-- 22. RPUSH push to right
+RPUSH queue:tasks "Task 2"
+
+-- 23. LPOP pop from left
+LPOP queue:tasks
+
+-- 24. RPOP pop from right
+RPOP queue:tasks
+
+-- 25. LLEN list length
+LLEN queue:tasks
+
+-- 26. LRANGE get range
+LRANGE queue:tasks 0 -1
+
+-- 27. LINDEX get by index
+LINDEX queue:tasks 0
+
+-- 28. LSET set by index
+LSET queue:tasks 0 "Updated Task"
+
+-- 29. LTRIM trim list
+LTRIM queue:tasks 0 99
+
+-- 30. RPOPLPUSH move element
+RPOPLPUSH source_list destination_list
+
+-- ============================================
+-- 31-40: Set Operations
+-- ============================================
+
+-- 31. SADD add to set
+SADD tags:post1 "python" "redis" "database"
+
+-- 32. SMEMBERS get all members
+SMEMBERS tags:post1
+
+-- 33. SISMEMBER check membership
+SISMEMBER tags:post1 "python"
+
+-- 34. SCARD set cardinality
+SCARD tags:post1
+
+-- 35. SREM remove from set
+SREM tags:post1 "python"
+
+-- 36. SPOP random member
+SPOP tags:post1
+
+-- 37. SRANDMEMBER random members
+SRANDMEMBER tags:post1 2
+
+-- 38. SUNION set union
+SUNION tags:post1 tags:post2
+
+-- 39. SINTER set intersection
+SINTER tags:post1 tags:post2
+
+-- 40. SDIFF set difference
+SDIFF tags:post1 tags:post2
+
+-- ============================================
+-- 41-50: Hash Operations
+-- ============================================
+
+-- 41. HSET set hash field
+HSET user:1 name "John" email "john@example.com"
+
+-- 42. HGET get hash field
+HGET user:1 name
+
+-- 43. HMSET multiple fields
+HMSET user:2 name "Jane" email "jane@example.com" age 30
+
+-- 44. HMGET multiple fields
+HMGET user:1 name email age
+
+-- 45. HGETALL get all fields
+HGETALL user:1
+
+-- 46. HKEYS get all keys
+HKEYS user:1
+
+-- 47. HVALS get all values
+HVALS user:1
+
+-- 48. HLEN hash length
+HLEN user:1
+
+-- 49. HEXISTS check field existence
+HEXISTS user:1 name
+
+-- 50. HDEL delete field
+HDEL user:1 age
+
+-- Additional Advanced Commands:
+
+-- LPUSHX push only if key exists
+LPUSHX existing_list "value"
+
+-- RPUSHX push right only if exists
+RPUSHX existing_list "value"
+
+-- LINSERT insert before/after
+LINSERT mylist BEFORE "pivot" "value"
+
+-- BLPOP blocking pop
+BLPOP queue:tasks 10
+
+-- BRPOP blocking right pop
+BRPOP queue:tasks 10
+
+-- GETSET get and set
+GETSET mykey "newvalue"
+
+-- SETNX set if not exists
+SETNX onlyonce "value"
+
+-- GETRANGE substring
+GETRANGE mystring 0 3
+
+-- SETRANGE set range
+SETRANGE mystring 0 "new"
+
+-- BITCOUNT count bits
+BITCOUNT mykey
+
+-- ZCARD sorted set size
+ZCARD scores
+
+-- ZADD add to sorted set
+ZADD scores 100 "player1" 200 "player2"
+
+-- ZRANGE get by range
+ZRANGE scores 0 -1
+
+-- ZREVRANGE reverse range
+ZREVRANGE scores 0 -1
+
+-- ZRANK get rank
+ZRANK scores "player1"
+
+-- ZSCORE get score
+ZSCORE scores "player1"
+
+-- ZREM remove from sorted set
+ZREM scores "player1"
+
+-- ZUNIONSTORE union of sorted sets
+ZUNIONSTORE out 2 zset1 zset2
+
+-- ZINTERSTORE intersection
+ZINTERSTORE out 2 zset1 zset2
+
+-- GEOADD add geo location
+GEOADD locations 13.361389 38.115556 "Palermo"
+
+-- GEODIST distance between locations
+GEODIST locations "Palermo" "Catania"
+
+-- PFADD HyperLogLog add
+PFADD hll "a" "b" "c"
+
+-- PFCOUNT HyperLogLog count
+PFCOUNT hll
